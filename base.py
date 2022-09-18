@@ -172,14 +172,14 @@ class HeavyBallNODE(NODE):
     def forward(self, t, x):
         """
         Compute [theta' m' v'] with heavy ball parametrization in
-        $$ h' = -m $$
+        $$ h' = -m $$ 如果传入actv_h，则是actv_h(m); 这里的m是论文的-m
         $$ m' = sign * df - gamma * m $$
         based on paper https://www.jmlr.org/papers/volume21/18-808/18-808.pdf
         :param t: time, shape [1]
         :param x: [theta m], shape [batch, 2, dim]
         :return: [theta' m'], shape [batch, 2, dim]
         """
-        self.nfe += 1
+        self.nfe += 1 # 已经通过调试验证：只有在这个地方nfe(forward)才会增加;但是调用多少次是forward是完全由odeint自己决定的...?
         h, m = torch.split(x, 1, dim=1)
         dh = self.actv_h(- m)
         dm = self.df(t, h) * self.sign - self.gammaact(self.gamma()) * m

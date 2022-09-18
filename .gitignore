@@ -1,0 +1,7 @@
+/data/walker
+/walker.zip
+/output
+
+# 全局忽略
+__pycache__
+.vscode
